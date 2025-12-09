@@ -1,0 +1,25 @@
+# Core AI
+torch>=2.0.0
+torchvision>=0.15.0
+numpy
+pandas
+scikit-learn
+matplotlib
+pillow
+opencv-python-headless
+
+# Model & Augmentation
+segmentation-models-pytorch
+albumentations
+
+# Data Processing
+scipy  # Để đọc file .mat
+
+# Backend & API
+fastapi
+uvicorn
+python-multipart
+
+# Frontend
+streamlit
+requests

@@ -1,0 +1,20 @@
+# Bỏ qua dữ liệu (Data không bao giờ up lên Github)
+data/
+weights/
+*.pth
+*.onnx
+
+# Bỏ qua file môi trường ảo và cache
+venv/
+env/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Bỏ qua file cấu hình riêng của editor
+.vscode/
+.idea/
+.env
+
+# Bỏ qua file log
+*.log
