@@ -1,20 +1,26 @@
-# Bỏ qua dữ liệu (Data không bao giờ up lên Github)
+# --- BẮT BUỘC (Dữ liệu & Model) ---
 data/
 weights/
 *.pth
 *.onnx
 
-# Bỏ qua file môi trường ảo và cache
+# --- Python & Môi trường ---
 venv/
 env/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# Bỏ qua file cấu hình riêng của editor
+# --- Cấu hình Editor ---
 .vscode/
 .idea/
 .env
 
-# Bỏ qua file log
+# --- File Log & Debug ---
 *.log
+debug_keys.py  
+
+# --- Rác Hệ Điều Hành (Nên thêm) ---
+.DS_Store      # Rác của Mac
+Thumbs.db      # Rác của Windows (File xem trước ảnh)
+desktop.ini    # Rác cấu hình folder Windows
