@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* LIGHT MODE (Chế độ Lâm sàng) -> Chữ ĐEN nền TRẮNG */
+  :root {
+    --bg-primary: #FFFFFF;    /* Nền trắng tinh */
+    --bg-secondary: #F3F4F6;  /* Màu nền phụ (xám rất nhạt) */
+    --bg-hover: #E5E7EB;
+    
+    /* QUAN TRỌNG: Đổi thành màu ĐEN (#000000) */
+    --text-primary: #000000;  
+    --text-secondary: #374151; /* Màu phụ vẫn để xám đậm để phân cấp thông tin */
+    
+    --accent-color: #0284C7;  /* Medical Blue */
+    --border-color: #D1D5DB;
+  }
+
+  /* DARK MODE (Chế độ Chẩn đoán) -> Chữ TRẮNG nền ĐEN/XANH ĐẬM */
+  .dark {
+    --bg-primary: #0B1120;    /* Nền tối sâu */
+    --bg-secondary: #1E293B;
+    --bg-hover: #334155;
+    
+    /* QUAN TRỌNG: Đổi thành màu TRẮNG (#FFFFFF) */
+    --text-primary: #FFFFFF;  
+    --text-secondary: #CBD5E1; /* Màu phụ sáng hơn chút */
+    
+    --accent-color: #38BDF8;
+    --border-color: #334155;
+  }
+
+  /* Áp dụng vào toàn bộ trang web */
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary); /* Chữ sẽ tự động đổi màu theo biến trên */
+    transition: background-color 0.3s, color 0.3s;
+  }
+}
