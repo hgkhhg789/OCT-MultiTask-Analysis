@@ -1,7 +1,8 @@
+// src/components/Layout/MainLayout.jsx
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Users, Activity, FileText, Settings, LogOut, Bell, Sun, Moon, Menu } from 'lucide-react';
-import { useTheme } from '../../ThemeContext'; // Giả sử bạn đã có ThemeContext
+import { useTheme } from '../../ThemeContext'; 
 
 const MainLayout = () => {
   const { theme, toggleTheme } = useTheme();
@@ -16,7 +17,7 @@ const MainLayout = () => {
     { path: '/', name: 'Dashboard', icon: LayoutDashboard },
     { path: '/patients', name: 'Quản lý Bệnh nhân', icon: Users },
     { path: '/exam/new', name: 'Ca chụp mới', icon: Activity },
-    // { path: '/reports', name: 'Báo cáo', icon: FileText }, // Nếu có trang ds báo cáo
+    // { path: '/reports', name: 'Báo cáo', icon: FileText }, 
   ];
 
   return (
@@ -84,7 +85,12 @@ const MainLayout = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="p-2 text-medical-subtext hover:bg-medical-hover rounded-full relative">
+            {/* NÚT CHUÔNG ĐÃ ĐƯỢC CẬP NHẬT */}
+            <button 
+              onClick={() => navigate('/notifications')} 
+              className="p-2 text-medical-subtext hover:bg-medical-hover rounded-full relative transition-colors"
+              title="Thông báo"
+            >
               <Bell size={20} />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
             </button>
@@ -101,7 +107,7 @@ const MainLayout = () => {
           </div>
         </header>
 
-        {/* Page Content (Outlet sẽ render các trang con tại đây) */}
+        {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-0 scroll-smooth">
           <Outlet />
         </main>
