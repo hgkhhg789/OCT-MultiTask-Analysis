@@ -1,0 +1,155 @@
+{
+  "project_meta": {
+    "name": "RetinaNet.AI",
+    "version": "1.0.0",
+    "description": "Hệ thống hỗ trợ chẩn đoán hình ảnh OCT tự động sử dụng Multi-Task U-Net.",
+    "domain": "Medical Imaging / Ophthalmology",
+    "author": "FPT University Student"
+  },
+  
+  "tech_stack": {
+    "frontend": {
+      "framework": "React 18 (Vite)",
+      "styling": "Tailwind CSS",
+      "state_management": "React Context API",
+      "visualization": "Recharts (Charts), React-Zoom-Pan-Pinch (Viewer)",
+      "icons": "Lucide React"
+    },
+    "backend": {
+      "framework": "FastAPI (Python 3.10)",
+      "database": "PostgreSQL",
+      "storage": "MinIO / AWS S3",
+      "ai_engine": "PyTorch / TensorFlow"
+    },
+    "deployment": {
+      "container": "Docker",
+      "orchestration": "Docker Compose / K8s"
+    }
+  },
+
+  "database_schema": {
+    "users": {
+      "description": "Bác sĩ và Quản trị viên",
+      "fields": {
+        "id": "UUID (PK)",
+        "email": "String (Unique)",
+        "password_hash": "String",
+        "full_name": "String",
+        "role": "Enum('ADMIN', 'DOCTOR', 'TECHNICIAN')",
+        "avatar_url": "String"
+      }
+    },
+    "patients": {
+      "description": "Hồ sơ bệnh nhân (Mini-EHR)",
+      "fields": {
+        "id": "String (PK - format: BNxxxxx)",
+        "full_name": "String",
+        "dob": "Date",
+        "gender": "Enum('Male', 'Female', 'Other')",
+        "phone": "String",
+        "medical_history": "Array<String>",
+        "risk_level": "Enum('None', 'Medium', 'High')",
+        "created_at": "Timestamp"
+      }
+    },
+    "medical_records": {
+      "description": "Lần khám và kết quả chụp OCT",
+      "fields": {
+        "id": "UUID (PK)",
+        "patient_id": "String (FK -> patients.id)",
+        "doctor_id": "UUID (FK -> users.id)",
+        "visit_date": "Date",
+        "original_image_url": "String",
+        "mask_image_url": "String",
+        "diagnosis": "String",
+        "severity": "Enum('None', 'Medium', 'High')",
+        "lesion_area_px": "Integer",
+        "confidence_score": "Float (0.0 - 1.0)",
+        "doctor_notes": "Text",
+        "status": "Enum('PROCESSING', 'COMPLETED', 'VERIFIED')"
+      }
+    },
+    "notifications": {
+      "description": "Hệ thống thông báo",
+      "fields": {
+        "id": "UUID (PK)",
+        "user_id": "UUID (FK)",
+        "type": "Enum('WARNING', 'SUCCESS', 'INFO', 'SYSTEM')",
+        "title": "String",
+        "message": "String",
+        "is_read": "Boolean",
+        "created_at": "Timestamp"
+      }
+    }
+  },
+
+  "api_endpoints": {
+    "auth": [
+      { "method": "POST", "path": "/api/v1/auth/login", "desc": "Đăng nhập lấy JWT Token" },
+      { "method": "POST", "path": "/api/v1/auth/refresh", "desc": "Làm mới Token" }
+    ],
+    "patients": [
+      { "method": "GET", "path": "/api/v1/patients", "desc": "Lấy danh sách BN (có filter & pagination)" },
+      { "method": "POST", "path": "/api/v1/patients", "desc": "Tạo hồ sơ BN mới" },
+      { "method": "GET", "path": "/api/v1/patients/{id}", "desc": "Lấy chi tiết và lịch sử khám của BN" }
+    ],
+    "examination": [
+      { "method": "POST", "path": "/api/v1/exam/upload", "desc": "Upload ảnh OCT lên Storage" },
+      { "method": "POST", "path": "/api/v1/exam/analyze", "desc": "Gửi ảnh vào AI Model để phân tích" },
+      { "method": "POST", "path": "/api/v1/exam/save", "desc": "Lưu kết quả khám vào DB" }
+    ],
+    "stats": [
+      { "method": "GET", "path": "/api/v1/dashboard/stats", "desc": "Lấy số liệu thống kê Dashboard" }
+    ]
+  },
+
+  "ai_model_spec": {
+    "architecture": "Multi-Task U-Net",
+    "input": {
+      "format": "Grayscale / RGB Image",
+      "resolution": "256x256 px",
+      "normalization": "Wait-Standardization"
+    },
+    "output": {
+      "segmentation_mask": "Binary/Multi-class Matrix (256x256)",
+      "classification": "Disease Label (AMD, DME, CNV, Normal)",
+      "metrics": {
+        "confidence": "Float",
+        "lesion_area": "Integer (Pixels)"
+      }
+    },
+    "layers": [
+      { "id": "fluid", "label": "Intraretinal Fluid (IRF)" },
+      { "id": "rpe", "label": "Retinal Pigment Epithelium" },
+      { "id": "lesion", "label": "General Lesion Area" }
+    ]
+  },
+
+  "frontend_routes": {
+    "public": ["/login", "/forgot-password"],
+    "protected": [
+      { "path": "/", "component": "DashboardPage" },
+      { "path": "/patients", "component": "PatientListPage" },
+      { "path": "/patients/:id", "component": "PatientProfilePage" },
+      { "path": "/exam/new", "component": "UploadScanPage" },
+      { "path": "/exam/:visitId/analyze", "component": "AnalysisViewerPage" },
+      { "path": "/exam/:visitId/report", "component": "ReportPreviewPage" },
+      { "path": "/notifications", "component": "NotificationPage" },
+      { "path": "/settings", "component": "SettingsPage" }
+    ]
+  },
+
+  "ui_features": {
+    "theme": "System / Light / Dark Mode",
+    "viewer": {
+      "zoom_pan": true,
+      "opacity_control": true,
+      "layer_toggle": true,
+      "side_by_side_compare": true,
+      "human_annotation": ["Draw", "Erase"]
+    },
+    "charts": {
+      "progression_chart": "Area Chart (Lesion Size vs Time)"
+    }
+  }
+}
